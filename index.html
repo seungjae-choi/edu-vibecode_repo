@@ -11,9 +11,11 @@
             flex-direction: column;
             align-items: center;
             justify-content: center;
-            height: 100vh;
+            min-height: 100vh; /* Use min-height to allow content to grow */
             margin: 0;
             background-color: #f0f2f5;
+            color: #333;
+            transition: background-color 0.3s, color 0.3s;
         }
         .container {
             text-align: center;
@@ -21,14 +23,24 @@
             padding: 40px;
             border-radius: 10px;
             box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+            transition: background-color 0.3s, box-shadow 0.3s;
         }
         h1 {
             color: #333;
+            transition: color 0.3s;
         }
-        .numbers {
+        .numbers-set {
+            display: flex;
+            flex-direction: column; /* Stack sets vertically */
+            gap: 10px; /* Space between sets */
+            margin: 20px 0;
+        }
+        .lotto-numbers-display {
             display: flex;
             justify-content: center;
-            margin: 20px 0;
+            flex-wrap: wrap; /* Allow numbers to wrap if container is too small */
+            min-height: 60px; /* Ensure space even if empty */
+            align-items: center;
         }
         .number {
             display: flex;
@@ -43,6 +55,7 @@
             font-size: 24px;
             font-weight: bold;
             border: 2px solid #dee2e6;
+            transition: background-color 0.3s, color 0.3s, border-color 0.3s;
         }
         button {
             padding: 10px 20px;
@@ -53,45 +66,123 @@
             color: white;
             border-radius: 5px;
             transition: background-color 0.3s;
+            margin: 5px; /* Add some margin for theme toggle button */
         }
         button:hover {
             background-color: #0056b3;
         }
+        .theme-toggle-button {
+            background-color: #6c757d;
+        }
+        .theme-toggle-button:hover {
+            background-color: #5a6268;
+        }
+
+        /* Dark Mode Styles */
+        body.dark-mode {
+            background-color: #2c3e50;
+            color: #ecf0f1;
+        }
+        body.dark-mode .container {
+            background: #34495e;
+            box-shadow: 0 4px 8px rgba(0,0,0,0.3);
+        }
+        body.dark-mode h1 {
+            color: #ecf0f1;
+        }
+        body.dark-mode .number {
+            background-color: #4a627a;
+            color: #ecf0f1;
+            border-color: #5a748f;
+        }
+        body.dark-mode button {
+            background-color: #0056b3;
+        }
+        body.dark-mode button:hover {
+            background-color: #004085;
+        }
+        body.dark-mode .theme-toggle-button {
+            background-color: #4a627a;
+        }
+        body.dark-mode .theme-toggle-button:hover {
+            background-color: #3e5367;
+        }
+
+        /* Loader for sequential generation */
+        .loader {
+            border: 4px solid #f3f3f3;
+            border-top: 4px solid #3498db;
+            border-radius: 50%;
+            width: 20px;
+            height: 20px;
+            animation: spin 1s linear infinite;
+            margin: 10px auto;
+        }
+
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+
     </style>
 </head>
 <body>
 
     <div class="container">
         <h1>로또 번호 추첨기</h1>
-        <div class="numbers" id="lotto-numbers">
-            <!-- 숫자가 여기에 표시됩니다 -->
+        <div class="numbers-set" id="lotto-numbers-sets">
+            <!-- 로또 번호 세트들이 여기에 표시됩니다 -->
         </div>
-        <button onclick="generateNumbers()">번호 추첨</button>
+        <button onclick="generateLottoSets()">번호 추첨</button>
+        <button class="theme-toggle-button" onclick="toggleTheme()">테마 전환</button>
     </div>
 
     <script>
-        function generateNumbers() {
-            const numbersContainer = document.getElementById('lotto-numbers');
-            numbersContainer.innerHTML = ''; // 이전 숫자 지우기
+        const NUM_SETS = 3;
+        const DELAY_MS = 1000; // 1초 지연
 
-            const numbers = new Set();
-            while (numbers.size < 6) {
-                const randomNumber = Math.floor(Math.random() * 45) + 1;
-                numbers.add(randomNumber);
-            }
+        function generateSingleSet(containerElement) {
+            return new Promise(resolve => {
+                const numbers = new Set();
+                while (numbers.size < 6) {
+                    const randomNumber = Math.floor(Math.random() * 45) + 1;
+                    numbers.add(randomNumber);
+                }
+                const sortedNumbers = Array.from(numbers).sort((a, b) => a - b);
 
-            const sortedNumbers = Array.from(numbers).sort((a, b) => a - b);
-
-            sortedNumbers.forEach(number => {
-                const numberElement = document.createElement('div');
-                numberElement.className = 'number';
-                numberElement.textContent = number;
-                // 공 색깔 입히기
-                numberElement.style.backgroundColor = getBallColor(number);
-                numberElement.style.color = 'white';
-                numberElement.style.border = 'none';
-                numbersContainer.appendChild(numberElement);
+                containerElement.innerHTML = ''; // Clear previous numbers in this set
+                sortedNumbers.forEach(number => {
+                    const numberElement = document.createElement('div');
+                    numberElement.className = 'number';
+                    numberElement.textContent = number;
+                    numberElement.style.backgroundColor = getBallColor(number);
+                    numberElement.style.color = 'white';
+                    numberElement.style.border = 'none';
+                    containerElement.appendChild(numberElement);
+                });
+                resolve();
             });
+        }
+
+        async function generateLottoSets() {
+            const lottoNumbersSetsContainer = document.getElementById('lotto-numbers-sets');
+            lottoNumbersSetsContainer.innerHTML = ''; // Clear all previous sets
+
+            for (let i = 0; i < NUM_SETS; i++) {
+                const setContainer = document.createElement('div');
+                setContainer.className = 'lotto-numbers-display';
+                lottoNumbersSetsContainer.appendChild(setContainer);
+
+                // Add a temporary loader or message
+                setContainer.innerHTML = '<div class="loader"></div>';
+
+                await new Promise(resolve => setTimeout(resolve, DELAY_MS / 2)); // Half delay before generating
+
+                await generateSingleSet(setContainer);
+                if (i < NUM_SETS - 1) {
+                    await new Promise(resolve => setTimeout(resolve, DELAY_MS / 2)); // Half delay after generating, before next set
+                }
+            }
         }
 
         function getBallColor(number) {
@@ -102,8 +193,28 @@
             return '#b0d840';                   // 녹색
         }
 
-        // 페이지 로드 시 초기 번호 생성
-        generateNumbers();
+        // Theme Toggle Logic
+        function toggleTheme() {
+            const body = document.body;
+            body.classList.toggle('dark-mode');
+            const isDarkMode = body.classList.contains('dark-mode');
+            localStorage.setItem('theme', isDarkMode ? 'dark' : 'light');
+        }
+
+        function applyThemeOnLoad() {
+            const savedTheme = localStorage.getItem('theme');
+            if (savedTheme === 'dark') {
+                document.body.classList.add('dark-mode');
+            } else {
+                document.body.classList.remove('dark-mode');
+            }
+        }
+
+        // Apply theme on page load and generate initial numbers
+        window.addEventListener('DOMContentLoaded', () => {
+            applyThemeOnLoad();
+            generateLottoSets(); // Generate initial 3 sets on load
+        });
     </script>
 
 </body>
