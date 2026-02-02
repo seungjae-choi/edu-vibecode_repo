@@ -20,8 +20,7 @@
       enable = true;
       previews = {
         web = {
-          command = ["npm", "start"];
-          manager = "web";
+          command = ["npm" "start"];
         };
       };
     };
