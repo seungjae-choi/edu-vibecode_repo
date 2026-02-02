@@ -19,7 +19,6 @@ This project is a simple lottery number generator with a dark mode/light mode fe
 - JavaScript (ES6+)
 
 ### File Structure
-- `index.html`: Main HTML file, includes meta-information, links to CSS and JS, and contains the UI elements.
 - `style.css`: Contains all the styling for the application, including light and dark mode styles.
 - `main.js`: Contains the JavaScript logic for lottery number generation and theme switching.
 
