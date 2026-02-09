@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>저녁 메뉴 추천</title>
+    <title data-i18n="title">저녁 메뉴 추천</title>
     <style>
         body {
             font-family: 'Arial', sans-serif;
@@ -67,6 +67,18 @@
         .theme-toggle-button:hover {
             background-color: #5a6268;
         }
+        .lang-switcher {
+            margin-top: 20px;
+        }
+        .lang-switcher button {
+            background-color: #f8f9fa;
+            color: #212529;
+            border: 1px solid #dee2e6;
+        }
+        .lang-switcher button.active {
+            background-color: #007bff;
+            color: white;
+        }
 
         /* Dark Mode Styles */
         body.dark-mode {
@@ -97,27 +109,77 @@
         body.dark-mode .theme-toggle-button:hover {
             background-color: #3e5367;
         }
+        body.dark-mode .lang-switcher button {
+            background-color: #4a627a;
+            color: #ecf0f1;
+            border-color: #5a748f;
+        }
+        body.dark-mode .lang-switcher button.active {
+            background-color: #0056b3;
+        }
     </style>
 </head>
 <body>
 
     <div class="container">
-        <h1>오늘 저녁 뭐 먹지?</h1>
+        <h1 data-i18n="headline">오늘 저녁 뭐 먹지?</h1>
         <div class="recommendation-set" id="menu-recommendation">
         </div>
-        <button onclick="recommendMenu()">메뉴 추천</button>
-        <button class="theme-toggle-button" onclick="toggleTheme()">테마 전환</button>
+        <button onclick="recommendMenu()" data-i18n="recommendButton">메뉴 추천</button>
+        <button class="theme-toggle-button" onclick="toggleTheme()" data-i18n="themeToggleButton">테마 전환</button>
+        <div class="lang-switcher">
+            <button onclick="changeLanguage('ko')" id="lang-ko" class="active">한국어</button>
+            <button onclick="changeLanguage('en')" id="lang-en">English</button>
+        </div>
     </div>
 
     <script>
-        const dinnerMenus = [
-            "치킨", "피자", "삼겹살", "된장찌개", "김치찌개", 
-            "파스타", "초밥", "햄버거", "떡볶이", "순대국밥",
-            "부대찌개", "족발", "보쌈", "짜장면", "짬뽕"
-        ];
+        const translations = {
+            ko: {
+                title: "저녁 메뉴 추천",
+                headline: "오늘 저녁 뭐 먹지?",
+                recommendButton: "메뉴 추천",
+                themeToggleButton: "테마 전환",
+                dinnerMenus: [
+                    "치킨", "피자", "삼겹살", "된장찌개", "김치찌개",
+                    "파스타", "초밥", "햄버거", "떡볶이", "순대국밥",
+                    "부대찌개", "족발", "보쌈", "짜장면", "짬뽕"
+                ]
+            },
+            en: {
+                title: "Dinner Menu Recommendation",
+                headline: "What's for dinner tonight?",
+                recommendButton: "Recommend Menu",
+                themeToggleButton: "Toggle Theme",
+                dinnerMenus: [
+                    "Chicken", "Pizza", "Pork Belly", "Doenjang Jjigae", "Kimchi Jjigae",
+                    "Pasta", "Sushi", "Hamburger", "Tteokbokki", "Sundaegukbap",
+                    "Budae Jjigae", "Jokbal", "Bossam", "Jajangmyeon", "Jjamppong"
+                ]
+            }
+        };
+
+        let currentLanguage = 'ko';
+
+        function changeLanguage(lang) {
+            currentLanguage = lang;
+            document.documentElement.lang = lang;
+            document.querySelectorAll('[data-i18n]').forEach(element => {
+                const key = element.getAttribute('data-i18n');
+                element.textContent = translations[lang][key];
+            });
+            document.querySelectorAll('.lang-switcher button').forEach(button => {
+                button.classList.remove('active');
+            });
+            document.getElementById(`lang-${lang}`).classList.add('active');
+            
+            // Clear previous recommendation
+            document.getElementById('menu-recommendation').innerHTML = '';
+        }
 
         function recommendMenu() {
             const menuRecommendationContainer = document.getElementById('menu-recommendation');
+            const dinnerMenus = translations[currentLanguage].dinnerMenus;
             const randomIndex = Math.floor(Math.random() * dinnerMenus.length);
             const recommendedMenu = dinnerMenus[randomIndex];
             
@@ -145,9 +207,10 @@
             }
         }
 
-        // Apply theme on page load
+        // Apply theme and language on page load
         window.addEventListener('DOMContentLoaded', () => {
             applyThemeOnLoad();
+            changeLanguage(currentLanguage);
         });
     </script>
 
