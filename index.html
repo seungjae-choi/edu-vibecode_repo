@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>로또 번호 추첨기</title>
+    <title>저녁 메뉴 추천</title>
     <style>
         body {
             font-family: 'Arial', sans-serif;
@@ -11,7 +11,7 @@
             flex-direction: column;
             align-items: center;
             justify-content: center;
-            min-height: 100vh; /* Use min-height to allow content to grow */
+            min-height: 100vh;
             margin: 0;
             background-color: #f0f2f5;
             color: #333;
@@ -29,33 +29,23 @@
             color: #333;
             transition: color 0.3s;
         }
-        .numbers-set {
-            display: flex;
-            flex-direction: column; /* Stack sets vertically */
-            gap: 10px; /* Space between sets */
+        .recommendation-set {
             margin: 20px 0;
         }
-        .lotto-numbers-display {
+        .menu-display {
             display: flex;
             justify-content: center;
-            flex-wrap: wrap; /* Allow numbers to wrap if container is too small */
-            min-height: 60px; /* Ensure space even if empty */
             align-items: center;
-        }
-        .number {
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            width: 50px;
-            height: 50px;
-            margin: 0 5px;
-            border-radius: 50%;
-            background-color: #f8f9fa;
-            color: #212529;
+            min-height: 60px;
             font-size: 24px;
             font-weight: bold;
+        }
+        .menu-item {
+            padding: 10px 20px;
+            border-radius: 5px;
+            background-color: #f8f9fa;
+            color: #212529;
             border: 2px solid #dee2e6;
-            transition: background-color 0.3s, color 0.3s, border-color 0.3s;
         }
         button {
             padding: 10px 20px;
@@ -66,7 +56,7 @@
             color: white;
             border-radius: 5px;
             transition: background-color 0.3s;
-            margin: 5px; /* Add some margin for theme toggle button */
+            margin: 5px;
         }
         button:hover {
             background-color: #0056b3;
@@ -90,7 +80,7 @@
         body.dark-mode h1 {
             color: #ecf0f1;
         }
-        body.dark-mode .number {
+        body.dark-mode .menu-item {
             background-color: #4a627a;
             color: #ecf0f1;
             border-color: #5a748f;
@@ -107,90 +97,35 @@
         body.dark-mode .theme-toggle-button:hover {
             background-color: #3e5367;
         }
-
-        /* Loader for sequential generation */
-        .loader {
-            border: 4px solid #f3f3f3;
-            border-top: 4px solid #3498db;
-            border-radius: 50%;
-            width: 20px;
-            height: 20px;
-            animation: spin 1s linear infinite;
-            margin: 10px auto;
-        }
-
-        @keyframes spin {
-            0% { transform: rotate(0deg); }
-            100% { transform: rotate(360deg); }
-        }
-
     </style>
 </head>
 <body>
 
     <div class="container">
-        <h1>로또 번호 추첨기</h1>
-        <div class="numbers-set" id="lotto-numbers-sets">
-            <!-- 로또 번호 세트들이 여기에 표시됩니다 -->
+        <h1>오늘 저녁 뭐 먹지?</h1>
+        <div class="recommendation-set" id="menu-recommendation">
         </div>
-        <button onclick="generateLottoSets()">번호 추첨</button>
+        <button onclick="recommendMenu()">메뉴 추천</button>
         <button class="theme-toggle-button" onclick="toggleTheme()">테마 전환</button>
     </div>
 
     <script>
-        const NUM_SETS = 3;
-        const DELAY_MS = 1000; // 1초 지연
+        const dinnerMenus = [
+            "치킨", "피자", "삼겹살", "된장찌개", "김치찌개", 
+            "파스타", "초밥", "햄버거", "떡볶이", "순대국밥",
+            "부대찌개", "족발", "보쌈", "짜장면", "짬뽕"
+        ];
 
-        function generateSingleSet(containerElement) {
-            return new Promise(resolve => {
-                const numbers = new Set();
-                while (numbers.size < 6) {
-                    const randomNumber = Math.floor(Math.random() * 45) + 1;
-                    numbers.add(randomNumber);
-                }
-                const sortedNumbers = Array.from(numbers).sort((a, b) => a - b);
-
-                containerElement.innerHTML = ''; // Clear previous numbers in this set
-                sortedNumbers.forEach(number => {
-                    const numberElement = document.createElement('div');
-                    numberElement.className = 'number';
-                    numberElement.textContent = number;
-                    numberElement.style.backgroundColor = getBallColor(number);
-                    numberElement.style.color = 'white';
-                    numberElement.style.border = 'none';
-                    containerElement.appendChild(numberElement);
-                });
-                resolve();
-            });
-        }
-
-        async function generateLottoSets() {
-            const lottoNumbersSetsContainer = document.getElementById('lotto-numbers-sets');
-            lottoNumbersSetsContainer.innerHTML = ''; // Clear all previous sets
-
-            for (let i = 0; i < NUM_SETS; i++) {
-                const setContainer = document.createElement('div');
-                setContainer.className = 'lotto-numbers-display';
-                lottoNumbersSetsContainer.appendChild(setContainer);
-
-                // Add a temporary loader or message
-                setContainer.innerHTML = '<div class="loader"></div>';
-
-                await new Promise(resolve => setTimeout(resolve, DELAY_MS / 2)); // Half delay before generating
-
-                await generateSingleSet(setContainer);
-                if (i < NUM_SETS - 1) {
-                    await new Promise(resolve => setTimeout(resolve, DELAY_MS / 2)); // Half delay after generating, before next set
-                }
-            }
-        }
-
-        function getBallColor(number) {
-            if (number <= 10) return '#fbc400'; // 노란색
-            if (number <= 20) return '#69c8f2'; // 파란색
-            if (number <= 30) return '#ff7272'; // 빨간색
-            if (number <= 40) return '#aaa';    // 회색
-            return '#b0d840';                   // 녹색
+        function recommendMenu() {
+            const menuRecommendationContainer = document.getElementById('menu-recommendation');
+            const randomIndex = Math.floor(Math.random() * dinnerMenus.length);
+            const recommendedMenu = dinnerMenus[randomIndex];
+            
+            menuRecommendationContainer.innerHTML = `
+                <div class="menu-display">
+                    <div class="menu-item">${recommendedMenu}</div>
+                </div>
+            `;
         }
 
         // Theme Toggle Logic
