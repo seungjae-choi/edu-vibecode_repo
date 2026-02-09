@@ -117,6 +117,99 @@
         body.dark-mode .lang-switcher button.active {
             background-color: #0056b3;
         }
+
+        /* Form Styles */
+        .contact-form-section {
+            margin-top: 40px;
+            padding-top: 20px;
+            border-top: 1px solid #eee;
+        }
+
+        .contact-form-section h2 {
+            margin-bottom: 20px;
+            color: #333;
+        }
+
+        body.dark-mode .contact-form-section h2 {
+            color: #ecf0f1;
+        }
+
+        .contact-form-section form {
+            display: flex;
+            flex-direction: column;
+            gap: 15px;
+            max-width: 400px;
+            margin: 0 auto;
+            text-align: left;
+        }
+
+        .contact-form-section .form-group {
+            display: flex;
+            flex-direction: column;
+        }
+
+        .contact-form-section label {
+            margin-bottom: 5px;
+            font-weight: bold;
+            color: #555;
+        }
+
+        body.dark-mode .contact-form-section label {
+            color: #ccc;
+        }
+
+        .contact-form-section input[type="text"],
+        .contact-form-section input[type="email"],
+        .contact-form-section textarea {
+            padding: 10px;
+            border: 1px solid #ddd;
+            border-radius: 5px;
+            font-size: 16px;
+            width: 100%;
+            box-sizing: border-box; /* Include padding and border in the element's total width and height */
+            background-color: #fcfcfc;
+            color: #333;
+        }
+
+        body.dark-mode .contact-form-section input[type="text"],
+        body.dark-mode .contact-form-section input[type="email"],
+        body.dark-mode .contact-form-section textarea {
+            background-color: #3a495e;
+            border-color: #5a748f;
+            color: #ecf0f1;
+        }
+
+        .contact-form-section input[type="text"]:focus,
+        .contact-form-section input[type="email"]:focus,
+        .contact-form-section textarea:focus {
+            border-color: #007bff;
+            outline: none;
+            box-shadow: 0 0 0 0.2rem rgba(0, 123, 255, 0.25);
+        }
+
+        .contact-form-section button[type="submit"] {
+            background-color: #28a745;
+            color: white;
+            padding: 10px 20px;
+            border-radius: 5px;
+            border: none;
+            cursor: pointer;
+            font-size: 18px;
+            transition: background-color 0.3s;
+            margin-top: 10px;
+        }
+
+        .contact-form-section button[type="submit"]:hover {
+            background-color: #218838;
+        }
+
+        body.dark-mode .contact-form-section button[type="submit"] {
+            background-color: #218838;
+        }
+
+        body.dark-mode .contact-form-section button[type="submit"]:hover {
+            background-color: #1e7e34;
+        }
     </style>
 </head>
 <body>
@@ -133,6 +226,25 @@
             <button onclick="changeLanguage('ja')" id="lang-ja">日本語</button>
             <button onclick="changeLanguage('zh')" id="lang-zh">中文</button>
         </div>
+
+        <div class="contact-form-section">
+            <h2 data-i18n="contactTitle">제휴 문의</h2>
+            <form action="https://formspree.io/f/mbdalkzb" method="POST">
+                <div class="form-group">
+                    <label for="name" data-i18n="nameLabel">이름:</label>
+                    <input type="text" id="name" name="name" required>
+                </div>
+                <div class="form-group">
+                    <label for="email" data-i18n="emailLabel">이메일:</label>
+                    <input type="email" id="email" name="email" required>
+                </div>
+                <div class="form-group">
+                    <label for="message" data-i18n="messageLabel">메시지:</label>
+                    <textarea id="message" name="message" rows="5" required></textarea>
+                </div>
+                <button type="submit" data-i18n="sendButton">보내기</button>
+            </form>
+        </div>
     </div>
 
     <script>
@@ -142,6 +254,11 @@
                 headline: "오늘 저녁 뭐 먹지?",
                 recommendButton: "메뉴 추천",
                 themeToggleButton: "테마 전환",
+                contactTitle: "제휴 문의",
+                nameLabel: "이름:",
+                emailLabel: "이메일:",
+                messageLabel: "메시지:",
+                sendButton: "보내기",
                 dinnerMenus: [
                     "치킨", "피자", "삼겹살", "된장찌개", "김치찌개",
                     "파스타", "초밥", "햄버거", "떡볶이", "순대국밥",
@@ -153,6 +270,11 @@
                 headline: "What's for dinner tonight?",
                 recommendButton: "Recommend Menu",
                 themeToggleButton: "Toggle Theme",
+                contactTitle: "Partnership Inquiry",
+                nameLabel: "Name:",
+                emailLabel: "Email:",
+                messageLabel: "Message:",
+                sendButton: "Send",
                 dinnerMenus: [
                     "Chicken", "Pizza", "Pork Belly", "Doenjang Jjigae", "Kimchi Jjigae",
                     "Pasta", "Sushi", "Hamburger", "Tteokbokki", "Sundaegukbap",
@@ -164,6 +286,11 @@
                 headline: "今夜の夕食は何にする？",
                 recommendButton: "メニューを推薦",
                 themeToggleButton: "テーマ切り替え",
+                contactTitle: "提携に関するお問い合わせ",
+                nameLabel: "名前：",
+                emailLabel: "メール：",
+                messageLabel: "メッセージ：",
+                sendButton: "送信",
                 dinnerMenus: [
                     "チキン", "ピザ", "サムギョプサル", "テンジャンチゲ", "キムチチゲ",
                     "パスタ", "寿司", "ハンバーガー", "トッポッキ", "スンデクッパ",
@@ -175,6 +302,11 @@
                 headline: "今晚吃什么？",
                 recommendButton: "推荐菜单",
                 themeToggleButton: "切换主题",
+                contactTitle: "合作咨询",
+                nameLabel: "姓名：",
+                emailLabel: "电子邮件：",
+                messageLabel: "消息：",
+                sendButton: "发送",
                 dinnerMenus: [
                     "炸鸡", "披萨", "烤五花肉", "大酱汤", "泡菜汤",
                     "意大利面", "寿司", "汉堡包", "炒年糕", "猪血肠汤饭",
