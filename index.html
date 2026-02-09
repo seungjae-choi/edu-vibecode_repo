@@ -212,6 +212,18 @@
                     <div class="menu-item">${recommendedMenu}</div>
                 </div>
             `;
+
+            speak(recommendedMenu);
+        }
+
+        function speak(text) {
+            if ('speechSynthesis' in window) {
+                const utterance = new SpeechSynthesisUtterance(text);
+                utterance.lang = currentLanguage;
+                window.speechSynthesis.speak(utterance);
+            } else {
+                console.log('Text-to-speech not supported in this browser.');
+            }
         }
 
         // Theme Toggle Logic
