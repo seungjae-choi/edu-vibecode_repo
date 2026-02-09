@@ -204,16 +204,15 @@
         function applyThemeOnLoad() {
             const savedTheme = localStorage.getItem('theme');
             if (savedTheme === 'dark') {
-                document.body.classList.add('dark-mode');
+                document.body.classList.2add('dark-mode');
             } else {
                 document.body.classList.remove('dark-mode');
             }
         }
 
-        // Apply theme on page load and generate initial numbers
+        // Apply theme on page load
         window.addEventListener('DOMContentLoaded', () => {
             applyThemeOnLoad();
-            generateLottoSets(); // Generate initial 3 sets on load
         });
     </script>
 
