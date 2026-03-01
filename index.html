@@ -16,6 +16,7 @@
             background-color: #f0f2f5;
             color: #333;
             transition: background-color 0.3s, color 0.3s;
+            position: relative; /* Added for correct absolute positioning of children */
         }
         .container {
             text-align: center;
@@ -46,6 +47,13 @@
             background-color: #f8f9fa;
             color: #212529;
             border: 2px solid #dee2e6;
+        }
+        .menu-image {
+            margin-top: 15px;
+            max-width: 80%;
+            height: auto;
+            border-radius: 8px;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
         }
         button {
             padding: 10px 20px;
@@ -210,9 +218,21 @@
         body.dark-mode .contact-form-section button[type="submit"]:hover {
             background-color: #1e7e34;
         }
+        #disqus_thread {
+            margin-top: 40px; /* Add some space above the Disqus thread */
+        }
+        .top-right-link {
+            position: absolute;
+            top: 20px;
+            right: 20px;
+            z-index: 1000; /* Ensure it's above other content */
+        }
     </style>
 </head>
 <body>
+    <div class="top-right-link">
+        <button onclick="location.href='animal_face_test.html'">동물상 테스트</button>
+    </div>
 
     <div class="container">
         <h1 data-i18n="headline">오늘 저녁 뭐 먹지?</h1>
@@ -342,6 +362,7 @@
             menuRecommendationContainer.innerHTML = `
                 <div class="menu-display">
                     <div class="menu-item">${recommendedMenu}</div>
+                    <img src="https://via.placeholder.com/200x150?text=${recommendedMenu}" alt="${recommendedMenu}" class="menu-image">
                 </div>
             `;
 
@@ -385,15 +406,18 @@
     <div id="disqus_thread"></div>
     <script>
         /**
-        *  RECOMMENDED CONFIGURATION VARIABLES: EDIT AND UNCOMMENT THE SECTION BELOW TO INSERT DYNAMIC VALUES FROM YOUR PLATFORM OR CMS.
-        *  LEARN WHY DEFINING THESE VARIABLES IS IMPORTANT: https://disqus.com/admin/universalcode/#configuration-variables    */
+        *  Disqus Configuration:
+        *  This section configures Disqus comments.
+        *  Make sure 'vibecode' is your correct Disqus shortname.
+        *  Disqus might not load correctly on 'localhost' due to security policies.
+        */
         var disqus_config = function () {
-        this.page.url = window.location.href;  // Replace PAGE_URL with your page's canonical URL variable
-        this.page.identifier = window.location.pathname; // Replace PAGE_IDENTIFIER with your page's unique identifier variable
+        this.page.url = window.location.href;  // Use current page's URL
+        this.page.identifier = window.location.pathname; // Use current page's path as identifier
         };
         (function() { // DON'T EDIT BELOW THIS LINE
         var d = document, s = d.createElement('script');
-        s.src = 'https://vibecode.disqus.com/embed.js';
+        s.src = '1/embed.js';
         s.setAttribute('data-timestamp', +new Date());
         (d.head || d.body).appendChild(s);
         })();
@@ -401,4 +425,4 @@
     <noscript>Please enable JavaScript to view the <a href="https://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
 
 </body>
-</html>
+</html>2
