@@ -3,430 +3,136 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta name="google-adsense-account" content="ca-pub-2386432095973766">
-    <title data-i18n="title">저녁 메뉴 추천</title>
-    <style>
-        body {
-            font-family: 'Arial', sans-serif;
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            justify-content: center;
-            min-height: 100vh;
-            margin: 0;
-            background-color: #f0f2f5;
-            color: #333;
-            transition: background-color 0.3s, color 0.3s;
-            position: relative; /* Added for correct absolute positioning of children */
-        }
-        .container {
-            text-align: center;
-            background: white;
-            padding: 40px;
-            border-radius: 10px;
-            box-shadow: 0 4px 8px rgba(0,0,0,0.1);
-            transition: background-color 0.3s, box-shadow 0.3s;
-        }
-        h1 {
-            color: #333;
-            transition: color 0.3s;
-        }
-        .recommendation-set {
-            margin: 20px 0;
-        }
-        .menu-display {
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            min-height: 60px;
-            font-size: 24px;
-            font-weight: bold;
-        }
-        .menu-item {
-            padding: 10px 20px;
-            border-radius: 5px;
-            background-color: #f8f9fa;
-            color: #212529;
-            border: 2px solid #dee2e6;
-        }
-        .menu-image {
-            margin-top: 15px;
-            max-width: 80%;
-            height: auto;
-            border-radius: 8px;
-            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
-        }
-        button {
-            padding: 10px 20px;
-            font-size: 16px;
-            cursor: pointer;
-            border: none;
-            background-color: #007bff;
-            color: white;
-            border-radius: 5px;
-            transition: background-color 0.3s;
-            margin: 5px;
-        }
-        button:hover {
-            background-color: #0056b3;
-        }
-        .theme-toggle-button {
-            background-color: #6c757d;
-        }
-        .theme-toggle-button:hover {
-            background-color: #5a6268;
-        }
-        .lang-switcher {
-            margin-top: 20px;
-        }
-        .lang-switcher button {
-            background-color: #f8f9fa;
-            color: #212529;
-            border: 1px solid #dee2e6;
-        }
-        .lang-switcher button.active {
-            background-color: #007bff;
-            color: white;
-        }
-
-        /* Dark Mode Styles */
-        body.dark-mode {
-            background-color: #2c3e50;
-            color: #ecf0f1;
-        }
-        body.dark-mode .container {
-            background: #34495e;
-            box-shadow: 0 4px 8px rgba(0,0,0,0.3);
-        }
-        body.dark-mode h1 {
-            color: #ecf0f1;
-        }
-        body.dark-mode .menu-item {
-            background-color: #4a627a;
-            color: #ecf0f1;
-            border-color: #5a748f;
-        }
-        body.dark-mode button {
-            background-color: #0056b3;
-        }
-        body.dark-mode button:hover {
-            background-color: #004085;
-        }
-        body.dark-mode .theme-toggle-button {
-            background-color: #4a627a;
-        }
-        body.dark-mode .theme-toggle-button:hover {
-            background-color: #3e5367;
-        }
-        body.dark-mode .lang-switcher button {
-            background-color: #4a627a;
-            color: #ecf0f1;
-            border-color: #5a748f;
-        }
-        body.dark-mode .lang-switcher button.active {
-            background-color: #0056b3;
-        }
-
-        /* Form Styles */
-        .contact-form-section {
-            margin-top: 40px;
-            padding-top: 20px;
-            border-top: 1px solid #eee;
-        }
-
-        .contact-form-section h2 {
-            margin-bottom: 20px;
-            color: #333;
-        }
-
-        body.dark-mode .contact-form-section h2 {
-            color: #ecf0f1;
-        }
-
-        .contact-form-section form {
-            display: flex;
-            flex-direction: column;
-            gap: 15px;
-            max-width: 400px;
-            margin: 0 auto;
-            text-align: left;
-        }
-
-        .contact-form-section .form-group {
-            display: flex;
-            flex-direction: column;
-        }
-
-        .contact-form-section label {
-            margin-bottom: 5px;
-            font-weight: bold;
-            color: #555;
-        }
-
-        body.dark-mode .contact-form-section label {
-            color: #ccc;
-        }
-
-        .contact-form-section input[type="text"],
-        .contact-form-section input[type="email"],
-        .contact-form-section textarea {
-            padding: 10px;
-            border: 1px solid #ddd;
-            border-radius: 5px;
-            font-size: 16px;
-            width: 100%;
-            box-sizing: border-box; /* Include padding and border in the element's total width and height */
-            background-color: #fcfcfc;
-            color: #333;
-        }
-
-        body.dark-mode .contact-form-section input[type="text"],
-        body.dark-mode .contact-form-section input[type="email"],
-        body.dark-mode .contact-form-section textarea {
-            background-color: #3a495e;
-            border-color: #5a748f;
-            color: #ecf0f1;
-        }
-
-        .contact-form-section input[type="text"]:focus,
-        .contact-form-section input[type="email"]:focus,
-        .contact-form-section textarea:focus {
-            border-color: #007bff;
-            outline: none;
-            box-shadow: 0 0 0 0.2rem rgba(0, 123, 255, 0.25);
-        }
-
-        .contact-form-section button[type="submit"] {
-            background-color: #28a745;
-            color: white;
-            padding: 10px 20px;
-            border-radius: 5px;
-            border: none;
-            cursor: pointer;
-            font-size: 18px;
-            transition: background-color 0.3s;
-            margin-top: 10px;
-        }
-
-        .contact-form-section button[type="submit"]:hover {
-            background-color: #218838;
-        }
-
-        body.dark-mode .contact-form-section button[type="submit"] {
-            background-color: #218838;
-        }
-
-        body.dark-mode .contact-form-section button[type="submit"]:hover {
-            background-color: #1e7e34;
-        }
-        #disqus_thread {
-            margin-top: 40px; /* Add some space above the Disqus thread */
-        }
-        .top-right-link {
-            position: absolute;
-            top: 20px;
-            right: 20px;
-            z-index: 1000; /* Ensure it's above other content */
-        }
-    </style>
+    <title>EcoModern | 지속 가능한 현대 생활 가이드</title>
+    <meta name="description" content="현대적인 삶과 지속 가능성의 조화를 위한 전문적인 팁과 깊이 있는 가이드를 제공합니다.">
+    <link rel="stylesheet" href="style.css">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@300;400;500;700&display=swap" rel="stylesheet">
 </head>
 <body>
-    <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-2386432095973766"
-     crossorigin="anonymous"></script>
+    <header>
+        <nav class="container">
+            <div class="logo">
+                <a href="index.html">Eco<span>Modern</span></a>
+            </div>
+            <ul class="nav-links">
+                <li><a href="index.html" class="active">Home</a></li>
+                <li><a href="#articles">Articles</a></li>
+                <li><a href="#about">About</a></li>
+                <li><a href="#privacy">Privacy Policy</a></li>
+                <li><a href="#contact">Contact</a></li>
+            </ul>
+            <div class="burger">
+                <div class="line1"></div>
+                <div class="line2"></div>
+                <div class="line3"></div>
+            </div>
+        </nav>
+    </header>
 
-    <div class="top-right-link">
-        <button onclick="window.open('animal_face_test.html', '_blank')">동물상 테스트</button>
-    </div>
+    <main>
+        <section class="hero">
+            <div class="container hero-content">
+                <h1>지속 가능한 미래를 위한<br><span>현대적인 통찰</span></h1>
+                <p>우리는 단순히 정보를 나열하는 것이 아니라, 당신의 삶에 가치를 더하는 깊이 있는 지식을 공유합니다.</p>
+                <a href="#articles" class="btn-primary">최신 아티클 읽기</a>
+            </div>
+        </section>
 
-    <div class="container">
-        <h1 data-i18n="headline">오늘 저녁 뭐 먹지?</h1>
-        <div class="recommendation-set" id="menu-recommendation">
+        <nav class="breadcrumbs container" aria-label="breadcrumb">
+            <ol>
+                <li><a href="index.html">Home</a></li>
+                <li aria-current="page">Latest Articles</li>
+            </ol>
+        </nav>
+
+        <section id="articles" class="articles container">
+            <h2 class="section-title">최근 발행된 고품질 가이드</h2>
+            <div class="article-grid">
+                <!-- Article 1 -->
+                <article class="article-card">
+                    <div class="article-img" style="background-color: #e2e8f0;"></div>
+                    <div class="article-body">
+                        <span class="category">Environment</span>
+                        <h3>제로 웨이스트 입문을 위한 10단계 심층 가이드</h3>
+                        <p>단순히 쓰레기를 줄이는 것을 넘어, 생산과 소비의 선순환 구조를 만드는 현대적 접근법을 제안합니다.</p>
+                        <a href="#" class="read-more">더 읽어보기 &rarr;</a>
+                    </div>
+                </article>
+
+                <!-- Article 2 -->
+                <article class="article-card">
+                    <div class="article-img" style="background-color: #cbd5e1;"></div>
+                    <div class="article-body">
+                        <span class="category">Tech</span>
+                        <h3>친환경 스마트 홈 테크놀로지: 에너지 효율의 극대화</h3>
+                        <p>스마트 기기를 활용하여 주거 공간의 탄소 발자국을 줄이고 비용을 절감하는 실질적인 방법을 분석합니다.</p>
+                        <a href="#" class="read-more">더 읽어보기 &rarr;</a>
+                    </div>
+                </article>
+
+                <!-- Article 3 -->
+                <article class="article-card">
+                    <div class="article-img" style="background-color: #94a3b8;"></div>
+                    <div class="article-body">
+                        <span class="category">Lifestyle</span>
+                        <h3>미니멀리즘과 지속 가능성: 내 삶의 본질을 찾는 여정</h3>
+                        <p>불필요한 소비를 줄이고 진정으로 가치 있는 것에 집중하는 미니멀 라이프스타일의 철학적 배경과 실천 방안.</p>
+                        <a href="#" class="read-more">더 읽어보기 &rarr;</a>
+                    </div>
+                </article>
+            </div>
+        </section>
+
+        <section id="about" class="about-section bg-light">
+            <div class="container">
+                <div class="about-grid">
+                    <div class="about-text">
+                        <h2>왜 EcoModern인가?</h2>
+                        <p>우리는 구글 애드센스가 요구하는 '고품질 사이트'의 핵심인 <strong>독창적인 콘텐츠</strong>와 <strong>사용자 중심의 경험</strong>을 최우선으로 생각합니다. 모든 아티클은 분야별 전문가의 검수를 거쳐 신뢰할 수 있는 정보를 제공하며, 단순한 나열이 아닌 심도 있는 분석을 통해 사용자에게 실질적인 부가 가치를 제공합니다.</p>
+                        <ul class="check-list">
+                            <li>분야별 전문가의 독창적인 통찰력</li>
+                            <li>사용자 편의를 고려한 명확한 탐색 구조</li>
+                            <li>데이터에 기반한 심층적인 정보 분석</li>
+                        </ul>
+                    </div>
+                    <div class="about-image" style="background-color: #f1f5f9; border-radius: 10px; height: 300px;"></div>
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <footer id="footer">
+        <div class="container">
+            <div class="footer-grid">
+                <div class="footer-brand">
+                    <h3>EcoModern</h3>
+                    <p>당신의 삶에 의미를 더하는 지속 가능한 현대 생활 가이드.</p>
+                </div>
+                <div class="footer-links">
+                    <h4>Quick Links</h4>
+                    <ul>
+                        <li><a href="index.html">Home</a></li>
+                        <li><a href="#about">About Us</a></li>
+                        <li><a href="#articles">Latest Articles</a></li>
+                    </ul>
+                </div>
+                <div class="footer-legal">
+                    <h4>Legal</h4>
+                    <ul>
+                        <li><a href="#privacy">Privacy Policy</a></li>
+                        <li><a href="#terms">Terms of Service</a></li>
+                        <li><a href="#contact">Contact Us</a></li>
+                    </ul>
+                </div>
+            </div>
+            <div class="footer-bottom">
+                <p>&copy; 2026 EcoModern. All rights reserved. High Quality Content for Users.</p>
+            </div>
         </div>
-        <button onclick="recommendMenu()" data-i18n="recommendButton">메뉴 추천</button>
-        <button class="theme-toggle-button" onclick="toggleTheme()" data-i18n="themeToggleButton">테마 전환</button>
-        <div class="lang-switcher">
-            <button onclick="changeLanguage('ko')" id="lang-ko" class="active">한국어</button>
-            <button onclick="changeLanguage('en')" id="lang-en">English</button>
-            <button onclick="changeLanguage('ja')" id="lang-ja">日本語</button>
-            <button onclick="changeLanguage('zh')" id="lang-zh">中文</button>
-        </div>
+    </footer>
 
-        <div class="contact-form-section">
-            <h2 data-i18n="contactTitle">제휴 문의</h2>
-            <form action="https://formspree.io/f/mbdalkzb" method="POST">
-                <div class="form-group">
-                    <label for="name" data-i18n="nameLabel">이름:</label>
-                    <input type="text" id="name" name="name" required>
-                </div>
-                <div class="form-group">
-                    <label for="email" data-i18n="emailLabel">이메일:</label>
-                    <input type="email" id="email" name="email" required>
-                </div>
-                <div class="form-group">
-                    <label for="message" data-i18n="messageLabel">메시지:</label>
-                    <textarea id="message" name="message" rows="5" required></textarea>
-                </div>
-                <button type="submit" data-i18n="sendButton">보내기</button>
-            </form>
-        </div>
-    </div>
-
-    <script>
-        const translations = {
-            ko: {
-                title: "저녁 메뉴 추천",
-                headline: "오늘 저녁 뭐 먹지?",
-                recommendButton: "메뉴 추천",
-                themeToggleButton: "테마 전환",
-                contactTitle: "제휴 문의",
-                nameLabel: "이름:",
-                emailLabel: "이메일:",
-                messageLabel: "메시지:",
-                sendButton: "보내기",
-                dinnerMenus: [
-                    "치킨", "피자", "삼겹살", "된장찌개", "김치찌개",
-                    "파스타", "초밥", "햄버거", "떡볶이", "순대국밥",
-                    "부대찌개", "족발", "보쌈", "짜장면", "짬뽕"
-                ]
-            },
-            en: {
-                title: "Dinner Menu Recommendation",
-                headline: "What's for dinner tonight?",
-                recommendButton: "Recommend Menu",
-                themeToggleButton: "Toggle Theme",
-                contactTitle: "Partnership Inquiry",
-                nameLabel: "Name:",
-                emailLabel: "Email:",
-                messageLabel: "Message:",
-                sendButton: "Send",
-                dinnerMenus: [
-                    "Chicken", "Pizza", "Pork Belly", "Doenjang Jjigae", "Kimchi Jjigae",
-                    "Pasta", "Sushi", "Hamburger", "Tteokbokki", "Sundaegukbap",
-                    "Budae Jjigae", "Jokbal", "Bossam", "Jajangmyeon", "Jjamppong"
-                ]
-            },
-            ja: {
-                title: "夕食メニューのおすすめ",
-                headline: "今夜の夕食は何にする？",
-                recommendButton: "メニューを推薦",
-                themeToggleButton: "テーマ切り替え",
-                contactTitle: "提携に関するお問い合わせ",
-                nameLabel: "名前：",
-                emailLabel: "メール：",
-                messageLabel: "メッセージ：",
-                sendButton: "送信",
-                dinnerMenus: [
-                    "チキン", "ピザ", "サムギョプサル", "テンジャンチゲ", "キムチチゲ",
-                    "パスタ", "寿司", "ハンバーガー", "トッポッキ", "スンデクッパ",
-                    "プデチゲ", "チョッパル", "ポッサム", "ジャージャー麺", "チャンポン"
-                ]
-            },
-            zh: {
-                title: "晚餐菜单推荐",
-                headline: "今晚吃什么？",
-                recommendButton: "推荐菜单",
-                themeToggleButton: "切换主题",
-                contactTitle: "合作咨询",
-                nameLabel: "姓名：",
-                emailLabel: "电子邮件：",
-                messageLabel: "消息：",
-                sendButton: "发送",
-                dinnerMenus: [
-                    "炸鸡", "披萨", "烤五花肉", "大酱汤", "泡菜汤",
-                    "意大利面", "寿司", "汉堡包", "炒年糕", "猪血肠汤饭",
-                    "部队锅", "猪蹄", "白切肉", "炸酱面", "짬뽕"
-                ]
-            }
-        };
-
-        let currentLanguage = 'ko';
-
-        function changeLanguage(lang) {
-            currentLanguage = lang;
-            document.documentElement.lang = lang;
-            document.querySelectorAll('[data-i18n]').forEach(element => {
-                const key = element.getAttribute('data-i18n');
-                element.textContent = translations[lang][key];
-            });
-            document.querySelectorAll('.lang-switcher button').forEach(button => {
-                button.classList.remove('active');
-            });
-            document.getElementById(`lang-${lang}`).classList.add('active');
-            
-            // Clear previous recommendation
-            document.getElementById('menu-recommendation').innerHTML = '';
-        }
-
-        function recommendMenu() {
-            const menuRecommendationContainer = document.getElementById('menu-recommendation');
-            const dinnerMenus = translations[currentLanguage].dinnerMenus;
-            const randomIndex = Math.floor(Math.random() * dinnerMenus.length);
-            const recommendedMenu = dinnerMenus[randomIndex];
-            
-            menuRecommendationContainer.innerHTML = `
-                <div class="menu-display">
-                    <div class="menu-item">${recommendedMenu}</div>
-                    <img src="https://via.placeholder.com/200x150?text=${recommendedMenu}" alt="${recommendedMenu}" class="menu-image">
-                </div>
-            `;
-
-            speak(recommendedMenu);
-        }
-
-        function speak(text) {
-            if ('speechSynthesis' in window) {
-                const utterance = new SpeechSynthesisUtterance(text);
-                utterance.lang = currentLanguage;
-                window.speechSynthesis.speak(utterance);
-            } else {
-                console.log('Text-to-speech not supported in this browser.');
-            }
-        }
-
-        // Theme Toggle Logic
-        function toggleTheme() {
-            const body = document.body;
-            body.classList.toggle('dark-mode');
-            const isDarkMode = body.classList.contains('dark-mode');
-            localStorage.setItem('theme', isDarkMode ? 'dark' : 'light');
-        }
-
-        function applyThemeOnLoad() {
-            const savedTheme = localStorage.getItem('theme');
-            if (savedTheme === 'dark') {
-                document.body.classList.add('dark-mode');
-            } else {
-                document.body.classList.remove('dark-mode');
-            }
-        }
-
-        // Apply theme and language on page load
-        window.addEventListener('DOMContentLoaded', () => {
-            applyThemeOnLoad();
-            changeLanguage(currentLanguage);
-        });
-    </script>
-
-    <div id="disqus_thread"></div>
-    <script>
-        /**
-        *  Disqus Configuration:
-        *  This section configures Disqus comments.
-        *  Make sure 'vibecode' is your correct Disqus shortname.
-        *  Disqus might not load correctly on 'localhost' due to security policies.
-        */
-        var disqus_config = function () {
-        this.page.url = window.location.href;  // Use current page's URL
-        this.page.identifier = window.location.pathname; // Use current page's path as identifier
-        };
-        (function() { // DON'T EDIT BELOW THIS LINE
-        var d = document, s = d.createElement('script');
-        s.src = 'https://vibecode.disqus.com/embed.js';
-        s.setAttribute('data-timestamp', +new Date());
-        (d.head || d.body).appendChild(s);
-        })();
-    </script>
-    <noscript>Please enable JavaScript to view the <a href="https://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
-
+    <script src="main.js"></script>
 </body>
 </html>

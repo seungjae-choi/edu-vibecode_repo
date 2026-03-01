@@ -1,82 +1,105 @@
+document.addEventListener('DOMContentLoaded', () => {
+    // Mobile Navigation Toggle
+    const burger = document.querySelector('.burger');
+    const nav = document.querySelector('.nav-links');
+    const navLinks = document.querySelectorAll('.nav-links li');
 
-const generateBtn = document.getElementById('generate-btn');
-const lottoNumbers = document.querySelectorAll('.number');
-const themeToggleButton = document.getElementById('theme-toggle-button');
-const body = document.body;
+    if (burger) {
+        burger.addEventListener('click', () => {
+            // Toggle Nav
+            nav.classList.toggle('nav-active');
 
-const themeConfirmationModal = document.getElementById('theme-confirmation-modal');
-const colorPreview = document.getElementById('color-preview');
-const confirmThemeChangeBtn = document.getElementById('confirm-theme-change');
-const cancelThemeChangeBtn = document.getElementById('cancel-theme-change');
+            // Animate Links
+            navLinks.forEach((link, index) => {
+                if (link.style.animation) {
+                    link.style.animation = '';
+                } else {
+                    link.style.animation = `navLinkFade 0.5s ease forwards ${index / 7 + 0.3}s`;
+                }
+            });
 
-let targetTheme;
-
-// Function to apply the theme
-const applyTheme = (theme) => {
-    if (theme === 'dark') {
-        body.classList.add('dark-mode');
-        themeToggleButton.textContent = '밝게';
-    } else {
-        body.classList.remove('dark-mode');
-        themeToggleButton.textContent = '어둡게';
-    }
-    localStorage.setItem('theme', theme);
-};
-
-// Check for saved theme on page load
-const savedTheme = localStorage.getItem('theme');
-if (savedTheme) {
-    applyTheme(savedTheme);
-} else if (window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches) {
-    // If no theme is saved, check system preference
-    applyTheme('dark');
-} else {
-    applyTheme('light');
-}
-
-
-// Event listener for theme toggle button
-themeToggleButton.addEventListener('click', () => {
-    targetTheme = body.classList.contains('dark-mode') ? 'light' : 'dark';
-    
-    if (targetTheme === 'dark') {
-        colorPreview.style.backgroundColor = '#2c2c2c';
-    } else {
-        colorPreview.style.backgroundColor = '#f0f2f5';
-    }
-    
-    themeConfirmationModal.style.display = 'block';
-});
-
-// Event listener for confirm button
-confirmThemeChangeBtn.addEventListener('click', () => {
-    applyTheme(targetTheme);
-    themeConfirmationModal.style.display = 'none';
-});
-
-// Event listener for cancel button
-cancelThemeChangeBtn.addEventListener('click', () => {
-    themeConfirmationModal.style.display = 'none';
-});
-
-
-generateBtn.addEventListener('click', () => {
-    const numbers = new Set();
-    while (numbers.size < 6) {
-        numbers.add(Math.floor(Math.random() * 45) + 1);
+            // Burger Animation
+            burger.classList.toggle('toggle');
+        });
     }
 
-    const sortedNumbers = Array.from(numbers).sort((a, b) => a - b);
-
-    lottoNumbers.forEach((number, index) => {
-        // Add a small delay for each ball to appear
-        setTimeout(() => {
-            number.textContent = sortedNumbers[index];
-            // A simple scale animation
-            number.style.transform = 'scale(1.1)';
-            setTimeout(() => {
-                number.style.transform = 'scale(1)';
-            }, 100);
-        }, index * 100);
+    // Header Scroll Effect
+    const header = document.querySelector('header');
+    window.addEventListener('scroll', () => {
+        if (window.scrollY > 50) {
+            header.style.padding = '10px 0';
+            header.style.boxShadow = '0 5px 20px rgba(0,0,0,0.1)';
+        } else {
+            header.style.padding = '0';
+            header.style.boxShadow = '0 2px 10px rgba(0,0,0,0.05)';
+        }
     });
+
+    // Smooth Scrolling for anchor links
+    document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+        anchor.addEventListener('click', function (e) {
+            e.preventDefault();
+            const targetId = this.getAttribute('href');
+            if (targetId === '#') return;
+            
+            const targetElement = document.querySelector(targetId);
+            if (targetElement) {
+                window.scrollTo({
+                    top: targetElement.offsetTop - 80,
+                    behavior: 'smooth'
+                });
+                
+                // Close mobile menu if open
+                if (nav.classList.contains('nav-active')) {
+                    nav.classList.remove('nav-active');
+                    burger.classList.remove('toggle');
+                }
+            }
+        });
+    });
+
+    // Active Link Highlighting on Scroll
+    const sections = document.querySelectorAll('section[id]');
+    window.addEventListener('scroll', () => {
+        let current = '';
+        const scrollPosition = window.pageYOffset + 100;
+
+        sections.forEach(section => {
+            const sectionTop = section.offsetTop;
+            const sectionHeight = section.clientHeight;
+            if (scrollPosition >= sectionTop && scrollPosition < sectionTop + sectionHeight) {
+                current = section.getAttribute('id');
+            }
+        });
+
+        document.querySelectorAll('.nav-links a').forEach(a => {
+            a.classList.remove('active');
+            if (a.getAttribute('href') === `#${current}`) {
+                a.classList.add('active');
+            }
+        });
+    });
+
+    // Simple Reveal Animation on Scroll
+    const revealElements = document.querySelectorAll('.article-card, .about-text, .about-image');
+    const revealOnScroll = () => {
+        const triggerBottom = window.innerHeight * 0.8;
+        revealElements.forEach(el => {
+            const elTop = el.getBoundingClientRect().top;
+            if (elTop < triggerBottom) {
+                el.style.opacity = '1';
+                el.style.transform = 'translateY(0)';
+            }
+        });
+    };
+
+    // Initial styles for reveal animation
+    revealElements.forEach(el => {
+        el.style.opacity = '0';
+        el.style.transform = 'translateY(30px)';
+        el.style.transition = 'all 0.6s ease-out';
+    });
+
+    window.addEventListener('scroll', revealOnScroll);
+    revealOnScroll(); // Run once on load
 });
